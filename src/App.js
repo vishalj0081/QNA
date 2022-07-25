@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import TableContent from './tableContent.component';
 
 import './styles.css';
@@ -32,6 +32,7 @@ const App = () => {
 
               setField(users);
               setnewError(false);
+              setusername('');
             }
 
             )
@@ -40,9 +41,10 @@ const App = () => {
 
         setnewError(true);
         setField([]);
+        setusername('');
         console.log(error)
       });
-
+     
   }
 
   const checkBoxChange = (event) => {
@@ -57,9 +59,9 @@ const App = () => {
 
       <div className="input">
         <label htmlFor="username" >Github username: </label>
-        <input id="username" type="text" onChange={userchange} />
+        <input id="username" type="text" value={username} onChange={userchange} />
         <label htmlFor="fork">Include forks: </label>
-        <input id="fork" type="checkbox" onChange={checkBoxChange} />
+        <input id="fork" type="checkbox" onChange={checkBoxChange}/>
         <button onClick={buttonClick} disabled={!username}  >Submit</button>
       </div>
       <section>
@@ -85,8 +87,8 @@ const App = () => {
         <div className='error'> Not Found</div>
 
       }
-     
-    
+
+
     </div>
   );
 }
