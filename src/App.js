@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TableContent from './tableContent.component';
 
 import './styles.css';
@@ -6,23 +6,22 @@ import './styles.css';
 
 const App = () => {
   const [field, setField] = useState([]);
-  const [username, setusername] = useState(defaultField);
-  const [newError, setnewError]= useState(false);
+  const [username, setusername] = useState('');
+  const [newError, setnewError] = useState(false);
   const [checkbox, setcheckbox] = useState(false);
-  
-  
+
+
   const userchange = (event) => {
     const userstring = event.target.value.toLocaleLowerCase();
-    
     setusername(userstring);
-    
   }
-  
+
+
   const buttonClick = () => {
 
     fetch(`https://api.github.com/users/${username}/repos`)
       .then((response) => {
-        if (!response.ok) throw new Error (response.status) ; 
+        if (!response.ok) throw new Error(response.status);
         else
           return response.json()
 
@@ -32,26 +31,26 @@ const App = () => {
               });
 
               setField(users);
-              
+              setnewError(false);
             }
 
             )
       })
       .catch((error) => {
-      
-       setnewError(true);
-       
+
+        setnewError(true);
+        setField([]);
         console.log(error)
       });
 
   }
 
   const checkBoxChange = (event) => {
-  setcheckbox(event.target.checked);
+    setcheckbox(event.target.checked);
   }
 
-  
-  
+
+
   return (
 
     <div className="App">
@@ -61,7 +60,7 @@ const App = () => {
         <input id="username" type="text" onChange={userchange} />
         <label htmlFor="fork">Include forks: </label>
         <input id="fork" type="checkbox" onChange={checkBoxChange} />
-        <button onClick={buttonClick} disabled={!username} >Submit</button>
+        <button onClick={buttonClick} disabled={!username}  >Submit</button>
       </div>
       <section>
         <header>
@@ -70,23 +69,24 @@ const App = () => {
           <div className="col">Description</div>
           <div className="col">Size</div>
         </header>
-       
+
         {field.map(user => (
 
           <TableContent key={user.id} user={user}
             checkbox={checkbox}
           />
-         
-        ))  
+
+        ))
         }
 
       </section>
-   {
-    newError == true && 
-    <div className='error'> Not Found</div>
-   
-   }
+      {
+        newError == true &&
+        <div className='error'> Not Found</div>
 
+      }
+     
+    
     </div>
   );
 }
